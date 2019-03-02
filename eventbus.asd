@@ -20,8 +20,11 @@
   :maintainer "noloop <noloop@zoho.com>"
   :license "GPLv3"
   :description "eventbus Test."
-  :depends-on (:eventbus)
+  :depends-on (:eventbus :simplet)
+  :defsystem-depends-on (:simplet-asdf)
   :components ((:module "test"
                 :components
-                ((:file "eventbus-test"))))
-  :perform (test-op (op system) (funcall (read-from-string "eventbus-test::run"))))
+                ((:test-file "eventbus-test"))))
+  :perform (test-op (op c)
+                    (progn (funcall (intern #.(string :run-simplet-asdf) :simplet) c)
+                           (symbol-call :simplet '#:run))))
