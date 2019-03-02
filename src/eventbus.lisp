@@ -8,6 +8,7 @@
   (length (gethash event-name eventbus)))
 
 (defun get-all-listeners-of-event (eventbus event-name)
+  "Return two values, the value: list of listeners of  the event, and present-p: list is present."
   (multiple-value-bind (value present-p)
       (gethash event-name eventbus)
     (values value present-p)))
@@ -39,3 +40,14 @@
     (when (eq 0 (get-listener-count-of-event eventbus event-name))
       (remhash event-name eventbus))
     (values)))
+
+(defun emit (eventbus event-name &rest args)
+  "Emite an event by passing the arguments offered to the listener function. If the listener is once, then the listener is excluded from the list of listeners."
+  (let ((listeners (gethash event-name eventbus)))
+        (when listeners
+          (dolist (i listeners)
+            (let ((fn (car i)))
+              (when (cadr i)
+                (off eventbus event-name fn))
+              ;; (format t "~%once: ~a~%" listeners)
+              (apply fn args))))))
