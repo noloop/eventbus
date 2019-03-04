@@ -24,7 +24,7 @@
     (emit eventbus :add-listener event-name))
   (setf (gethash event-name eventbus)
         (push (make-listener listener-fn t) (gethash event-name eventbus)))
-  (values))
+  eventbus)
 
 (defun on (eventbus event-name listener-fn)
   "Add one listener to an event. The add-listener event is emitted before adding the new listener."
@@ -32,7 +32,7 @@
     (emit eventbus :add-listener event-name))
   (setf (gethash event-name eventbus)
         (push (make-listener listener-fn nil) (gethash event-name eventbus)))
-  (values))
+  eventbus)
 
 (defun off (eventbus event-name listener-fn)
   "Remove the first listener from the event listeners list."
@@ -46,7 +46,7 @@
       (emit eventbus :remove-listener event-name))
     (when (eq 0 (get-listener-count-of-event eventbus event-name))
       (remhash event-name eventbus))
-    (values)))
+    eventbus))
 
 (defun emit (eventbus event-name &rest args)
   "Emite an event by passing the arguments offered to the listener function. If the listener is once, then the listener is excluded from the list of listeners."
@@ -57,7 +57,7 @@
               (when (cadr i)
                 (off eventbus event-name fn))
               (apply fn args))))
-    (values)))
+    eventbus))
 
 (defun get-all-events-name (eventbus)
   "Return one list with all name of events of the eventbus. The list returned includes add-listener and remove-listener."
@@ -75,5 +75,6 @@
          (listener-fn (car (first listeners))))
     (when listeners
       (off eventbus event-name listener-fn)
-      (remove-all-listeners-of-event eventbus event-name))))
+      (remove-all-listeners-of-event eventbus event-name))
+    eventbus))
 

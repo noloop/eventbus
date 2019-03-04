@@ -205,5 +205,3 @@
        (test "Test remove-all-listeners-of-event" #'test-remove-all-listeners-of-event)
        (test "Test remove-all-listeners-of-event-with-event-name-remove-listener" #'test-remove-all-listeners-of-event-with-event-name-remove-listener)
        (test "Test remove-all-listeners-of-event-with-event-name-add-listener" #'test-remove-all-listeners-of-event-with-event-name-add-listener))
-
-;; (format t "actual: ~a ,expected: ~a~%" actual expected)

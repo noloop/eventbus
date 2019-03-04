@@ -97,48 +97,57 @@ When emitting events, it is possible to pass arguments that will be passed to th
 
 ```lisp
 (let ((eventbus-instance (make-eventbus))
-      (listener-fn (lambda (a b c) '(a b c))))
+      (listener-fn (lambda (a b c) (format t "~a" (list a b c)))))
   (on eventbus-instance :my-event-name listener-fn)
   (emit eventbus-instance :my-event-name 1 2 3))
-```
-
-## Get all event names from an instance of eventbus
-
-```lisp
-(let ((eventbus-instance (make-eventbus))
-      (listener-fn (lambda () t)))
-  (on eventbus-instance :my-event-name listener-fn)
-  (get-all-events-name eventbus-instance))
+  
+=> (1 2 3)
 ```
 
 ## Get listener count of event
+
+Return length listeners of event. Return nil if event nonexistent.
 
 ```lisp
 (let ((eventbus-instance (make-eventbus))
       (listener-fn (lambda () t)))
   (on eventbus-instance :my-event-name listener-fn)
   (get-listener-count-of-event eventbus-instance :my-event-name))
+
+=> 1
 ```
 
 ## Get all listeners from event
+
+Return two values, the value: list of listeners of  the event, and present-p: list is present.
 
 ```lisp
 (let ((eventbus-instance (make-eventbus))
       (listener-fn (lambda () t)))
   (on eventbus-instance :my-event-name listener-fn)
   (get-all-listeners-of-event eventbus-instance :my-event-name))
+
+=> ((#<FUNCTION (LAMBDA ()) {10021B457B}> NIL))
+T
 ```
 
 ## Get all event names
 
+Return one list with all name of events of the eventbus. The list returned includes add-listener and remove-listener.
+
 ```lisp
 (let ((eventbus-instance (make-eventbus))
       (listener-fn (lambda () t)))
-  (on eventbus-instance :my-event-name listener-fn)
+  (on eventbus-instance :my-event-name1 listener-fn)
+  (on eventbus-instance :my-event-name2 listener-fn)
   (get-all-events-name eventbus-instance))
+
+=> (:MY-EVENT-NAME1 :MY-EVENT-NAME2)
 ```
 
 ## Remove all listeners of event
+
+Removing all listeners from the event. Will be called the off function for each listener, so the remove-listener event is emitted correctly for each listener removed.
 
 ```lisp
 (let ((eventbus-instance (make-eventbus))
@@ -147,6 +156,8 @@ When emitting events, it is possible to pass arguments that will be passed to th
   (on eventbus-instance :my-event-name listener-fn)
   (on eventbus-instance :my-event-name listener-fn)
   (remove-all-listeners-of-event eventbus-instance :my-event-name))
+
+=> NIL
 ```
 
 ## Events :add-listener and :remove-listener
@@ -167,6 +178,22 @@ There are two standard eventbus events, `:add-listener` is emitted when a new li
   (on eventbus-instance :my-event-name listener-fn)
   (off eventbus-instance :my-event-name listener-fn))
 ```
+
+## Chained functions
+
+The on, once, off, emit and remove-all-listeners-of-event functions can be cahined, see an example:
+
+```lisp
+(let ((eventbus-instance (make-eventbus))
+      (listener-fn (lambda () (print 'HERE!))))
+  (emit
+   (on eventbus-instance :my-event-name listener-fn)
+   :my-event-name))
+
+=> HERE! 
+#<HASH-TABLE :TEST EQ :COUNT 1 {1003F475A3}>
+```
+Above is returned hash-table,  which is an instance of eventbus. Returning the instance of eventbus that causes the functions to be chained.
 
 ## API
 
