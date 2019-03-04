@@ -197,23 +197,23 @@ Above is returned hash-table,  which is an instance of eventbus. Returning the i
 
 ## API
 
-function **(make-eventbus)**
+function **(make-eventbus)** => eventbus-instance
 
-function **(get-listener-count-of-event eventbus event-name)**
+function **(get-listener-count-of-event eventbus event-name)** => count
 
-function **(get-all-listeners-of-event eventbus event-name)**
+function **(get-all-listeners-of-event eventbus event-name)** => list-of-listeners
 
-function **(once eventbus event-name listener-fn)**
+function **(once eventbus event-name listener-fn)** => eventbus-instance
 
-function **(on eventbus event-name listener-fn)**
+function **(on eventbus event-name listener-fn)** => eventbus-instance
 
-function **(off eventbus event-name listener-fn)**
+function **(off eventbus event-name listener-fn)** => eventbus-instance
 
-function **(emit eventbus event-name &rest args)**
+function **(emit eventbus event-name &rest args)** => eventbus-instance
 
-function **(get-all-events-name  eventbus)**
+function **(get-all-events-name eventbus)** => list-of-event-names
 
-function **(remove-all-listeners-of-event  eventbus event-name)**
+function **(remove-all-listeners-of-event  eventbus event-name)** => eventbus-instance
 
 event **:add-listener**
 
