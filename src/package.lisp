@@ -7,4 +7,6 @@
            #:once
            #:on
            #:off
-           #:emit))
+           #:emit
+           #:get-all-events-name
+           #:remove-all-listeners-of-event))

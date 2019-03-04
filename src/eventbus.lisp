@@ -1,6 +1,7 @@
 (in-package #:noloop.eventbus)
 
 (defun make-eventbus ()
+  "Return eventbus instance."
   (make-hash-table :test 'eq))
 
 (defun get-listener-count-of-event (eventbus event-name)
@@ -18,13 +19,17 @@
   (list listener-fn is-once))
 
 (defun once (eventbus event-name listener-fn)
-  "Add one listener to an event. The listener is removed when the event is emitted."
+  "Add one listener to an event. The listener is removed when the event is emitted. The add-listener event is emitted before adding the new listener."
+  (when (gethash :add-listener eventbus)
+    (emit eventbus :add-listener event-name))
   (setf (gethash event-name eventbus)
         (push (make-listener listener-fn t) (gethash event-name eventbus)))
   (values))
 
 (defun on (eventbus event-name listener-fn)
-  "Add one listener to an event."
+  "Add one listener to an event. The add-listener event is emitted before adding the new listener."
+  (when (gethash :add-listener eventbus)
+    (emit eventbus :add-listener event-name))
   (setf (gethash event-name eventbus)
         (push (make-listener listener-fn nil) (gethash event-name eventbus)))
   (values))
@@ -37,6 +42,8 @@
                          (eq (car i) listener-fn))
                      listeners
                      :count 1))
+    (when (gethash :remove-listener eventbus)
+      (emit eventbus :remove-listener event-name))
     (when (eq 0 (get-listener-count-of-event eventbus event-name))
       (remhash event-name eventbus))
     (values)))
@@ -49,5 +56,23 @@
             (let ((fn (car i)))
               (when (cadr i)
                 (off eventbus event-name fn))
-              ;; (format t "~%once: ~a~%" listeners)
-              (apply fn args))))))
+              (apply fn args))))
+    (values)))
+
+(defun get-all-events-name (eventbus)
+  "Return one list with all name of events of the eventbus. The list returned includes add-listener and remove-listener."
+  (let ((keys '()))
+    (maphash
+     #'(lambda (key value)
+         (declare (ignore value))
+         (push key keys))
+     eventbus)
+    (nreverse keys)))
+
+(defun remove-all-listeners-of-event (eventbus event-name)
+  "Removing all listeners from the event. Will be called the off function for each listener, so the remove-listener event is emitted correctly for each listener removed."
+  (let* ((listeners (gethash event-name eventbus))
+         (listener-fn (car (first listeners))))
+    (when listeners
+      (off eventbus event-name listener-fn)
+      (remove-all-listeners-of-event eventbus event-name))))
