@@ -11,8 +11,7 @@
                 #:off
                 #:emit
                 #:get-all-events-name
-                #:remove-all-listeners-of-event
-                ))
+                #:remove-all-listeners-of-event))
 (in-package #:noloop.eventbus-test)
 
 (defun test-get-all-listeners-of-event ()
