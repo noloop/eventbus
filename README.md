@@ -56,7 +56,7 @@ An once event is an event that can only be emitted once because the added listen
 ```
 ## Add listener in event on
 
-An once event is an event that can only be emitted once because the added listener is deleted after it is first emitted.
+An on event is an event that can be emitted multiple times.
 
 ```lisp
 (let ((eventbus-instance (make-eventbus)))
