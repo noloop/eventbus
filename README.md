@@ -4,30 +4,23 @@
 
 ## Getting Started in eventbus
 
-### Download and installation
+### Download and load
 
-**1 - Download eventbus system**
-
-By quicklisp:
+**1 - Load eventbus system by quicklisp**
 
 ```
-IN PROGRESS...
+(ql:quickload :eventbus)
 ```
 
-or directly from github:
+**2 - Download and Load eventbus system by github and asdf**
+
+Download directly from github:
 
 ```
 git clone https://github.com/noloop/eventbus.git
 ```
-**2 - Install eventbus**
 
-By quicklisp:
-
-```
-IN PROGRESS...
-```
-
-or directly from asdf:
+and load by ASDF:
 
 ```lisp
 (asdf:load-system :eventbus)

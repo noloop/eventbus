@@ -92,7 +92,7 @@
     (once eventbus-instance :event-1 (lambda () (incf x)))
     (emit eventbus-instance :event-1)
     (emit eventbus-instance :event-1)
-    (eq x expected)))
+    (eql x expected)))
 
 (defun test-emit-on-event ()
   (let ((eventbus-instance (make-eventbus))
@@ -101,7 +101,7 @@
     (on eventbus-instance :event-1 (lambda () (incf x)))
     (emit eventbus-instance :event-1)
     (emit eventbus-instance :event-1)
-    (eq x expected)))
+    (eql x expected)))
 
 (defun test-emit-on-event-with-args ()
   (let ((eventbus-instance (make-eventbus))
@@ -110,7 +110,7 @@
     (on eventbus-instance :event-1 (lambda (n z) (incf x (+ n z))))
     (emit eventbus-instance :event-1 2 2)
     (emit eventbus-instance :event-1 2 2)
-    (eq x expected)))
+    (eql x expected)))
 
 (defun test-add-listener-emit-once-event ()
   (let ((eventbus-instance (make-eventbus))
@@ -119,7 +119,7 @@
     (once eventbus-instance :add-listener
           (lambda (event-name) (setf actual event-name)))
     (on eventbus-instance :event-1 (lambda ()))
-    (eq actual expected)))
+    (eql actual expected)))
 
 (defun test-add-listener-emit-on-event ()
   (let ((eventbus-instance (make-eventbus))
@@ -128,7 +128,7 @@
     (on eventbus-instance :add-listener
         (lambda (event-name) (setf actual event-name)))
     (on eventbus-instance :event-1 (lambda ()))
-    (eq actual expected)))
+    (eql actual expected)))
 
 (defun test-remove-listener-emit-on-event ()
   (let* ((eventbus-instance (make-eventbus))
@@ -138,7 +138,7 @@
            (lambda (event-name) (setf actual event-name))))
     (on eventbus-instance :remove-listener listener-fn)
     (off eventbus-instance :event-1 listener-fn)
-    (eq actual expected)))
+    (eql actual expected)))
 
 (defun test-get-all-events-name ()
   (let ((eventbus-instance (make-eventbus))
@@ -159,7 +159,7 @@
     (remove-all-listeners-of-event eventbus-instance :event-1)
     (setf actual
           (get-listener-count-of-event eventbus-instance :event-1))
-    (eq actual expected)))
+    (eql actual expected)))
 
 (defun test-remove-all-listeners-of-event-with-event-name-remove-listener ()
   (let ((eventbus-instance (make-eventbus))
@@ -172,7 +172,7 @@
     (remove-all-listeners-of-event eventbus-instance :remove-listener)
     (setf actual
           (get-listener-count-of-event eventbus-instance :remove-listener))
-    (eq actual expected)))
+    (eql actual expected)))
 
 (defun test-remove-all-listeners-of-event-with-event-name-add-listener ()
   (let ((eventbus-instance (make-eventbus))
@@ -185,7 +185,7 @@
     (remove-all-listeners-of-event eventbus-instance :add-listener)
     (setf actual
           (get-listener-count-of-event eventbus-instance :add-listener))
-    (eq actual expected)))
+    (eql actual expected)))
 
 (suite "Suite eventbus"
        (test "Test get-all-listeners-of-event" #'test-get-all-listeners-of-event)
